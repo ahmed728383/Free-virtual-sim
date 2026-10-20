@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreeNumber Hub</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6ff;color:#18213b}
+header{background:#101a36;color:white;padding:20px}
+nav{max-width:1000px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.logo{font-size:23px;font-weight:bold}
+.logo span{color:#91a5ff}
+.hero{text-align:center;padding:55px 20px 35px;background:linear-gradient(135deg,#e6ebff,#fff)}
+h1{font-size:clamp(32px,7vw,52px);margin:0 0 15px}
+h1 span{color:#465fff}
+.hero p{color:#626d85;line-height:1.7;max-width:570px;margin:0 auto 22px}
+button{border:0;border-radius:10px;padding:12px 17px;background:#465fff;color:white;font-weight:bold;cursor:pointer}
+main{max-width:1000px;margin:30px auto;padding:0 16px}
+h2{font-size:26px}
+.notice{background:#fff4d9;border:1px solid #f3d58a;padding:14px;border-radius:12px;font-size:13px;line-height:1.6}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+input,select{padding:13px;border:1px solid #d7dceb;border-radius:10px;background:white;font-size:15px;min-width:0}
+input{flex:1}
+#numbers{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:15px}
+.card{background:white;border:1px solid #e0e5f1;border-radius:15px;padding:19px;box-shadow:0 5px 18px #17234b09}
+.country{font-weight:bold;font-size:17px}
+.number{font-size:21px;font-weight:bold;margin:20px 0 5px;overflow-wrap:anywhere}
+.small{font-size:12px;color:#667085}
+.actions{display:flex;gap:8px;margin-top:17px}
+.actions button{flex:1;padding:10px 5px}
+.secondary{background:#eef1ff;color:#3547bd}
+footer{text-align:center;padding:25px;color:#68738a;font-size:12px}
+</style>
+</head>
+<body>
+<header><nav><div class="logo">✉ FreeNumber <span>Hub</span></div><span>Free SMS Demo</span></nav></header>
+<section class="hero">
+<h1>Your temporary inbox.<br><span>One simple place.</span></h1>
+<p>Explore countries and preview how a temporary SMS inbox can work. Real numbers require an approved phone-number provider.</p>
+<button onclick="document.getElementById('browse').scrollIntoView({behavior:'smooth'})">Explore numbers ↓</button>
+</section>
+<main id="browse">
+<h2>🌍 Explore countries</h2>
+<div class="notice"><b>Demo website:</b> These are fictional examples, not real phone numbers. No real SMS or verification codes are received yet. Never use a public inbox for banking or private accounts.</div>
+<div class="filters">
+<input id="search" placeholder="Search a country..." oninput="render()">
+<select id="country" onchange="render()">
+<option value="">All countries</option>
+<option>United States</option><option>United Kingdom</option>
+<option>Canada</option><option>Pakistan</option>
+<option>Germany</option><option>Australia</option>
+</select>
+</div>
+<div id="numbers"></div>
+<h2 style="margin-top:40px">How it works</h2>
+<div class="card" style="line-height:1.9">
+<b>1.</b> Choose a country.<br>
+<b>2.</b> Select a provider-approved number.<br>
+<b>3.</b> Receive messages in your own protected inbox after the live service is connected.
+</div>
+</main>
+<footer>© 2026 FreeNumber Hub · Demo version · Privacy matters</footer>
+<script>
+const data=[
+["🇺🇸","United States","+1 (202) 555-0101"],
+["🇬🇧","United Kingdom","+44 7700 900123"],
+["🇨🇦","Canada","+1 (416) 555-0102"],
+["🇵🇰","Pakistan","+92 300 0000105"],
+["🇩🇪","Germany","+49 151 0000 0103"],
+["🇦🇺","Australia","+61 400 000 106"]
+];
+function render(){
+const q=document.getElementById("search").value.toLowerCase();
+const c=document.getElementById("country").value;
+const list=data.filter(x=>(!c||x[1]===c)&&x[1].toLowerCase().includes(q));
+document.getElementById("numbers").innerHTML=list.map(x=>`
+<div class="card">
+<div class="country">${x[0]} ${x[1]}</div>
+<div class="number">${x[2]}</div>
+<div class="small">Sample number · Not real</div>
+<div class="actions">
+<button class="secondary" onclick="copyNumber('${x[2]}',this)">Copy</button>
+<button onclick="alert('Demo only: no real SMS inbox is connected yet.')">View inbox</button>
+</div></div>`).join("")||"<p>No countries found. Try another search.</p>";
+}
+function copyNumber(n,b){
+if(navigator.clipboard&&navigator.clipboard.writeText){
+navigator.clipboard.writeText(n).then(()=>{b.textContent="Copied!";setTimeout(()=>b.textContent="Copy",1200)}).catch(()=>alert(n));
+}else{alert("Sample number: "+n)}
+}
+render();
+</script>
+</body>
+</html>
